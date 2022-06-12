@@ -183,7 +183,7 @@ public class SQLUtil {
 		//连接
 		Connection conn =null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "jk123");
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai", "root", "jk123");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
