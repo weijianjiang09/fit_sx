@@ -11,6 +11,9 @@ import com.fit_sx.model.User;
 
 
 public class SQLUtil {
+	private static String url = "jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai" ;
+	private static String username ="root";
+	private static String password = "jk123";
 	public static void main(String[] args) {
 //		List<Admin> list=find(Admin.class,"select * from fit_admin");
 //		for (Admin admin : list) {
@@ -33,7 +36,7 @@ public class SQLUtil {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -71,7 +74,7 @@ public class SQLUtil {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -121,7 +124,7 @@ public class SQLUtil {
 	public static <E> E findById(Class cl,String tableName,Object id,String idKey) {
 		E obj=null;//如果findById为查询找，返回的应该是null而不是一个空对象
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -130,7 +133,7 @@ public class SQLUtil {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -188,7 +191,7 @@ public class SQLUtil {
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -398,7 +401,7 @@ public class SQLUtil {
 		//连接
 		Connection conn =null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
