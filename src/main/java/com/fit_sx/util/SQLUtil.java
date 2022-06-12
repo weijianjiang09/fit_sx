@@ -22,9 +22,16 @@ public class SQLUtil {
 //		}
 //		Admin admin=findById(Admin.class, "fit_admin", "a0002","name");
 //		System.out.println(admin);
-		System.out.println(getQueryDecimal("select count(*) from fit_admin where name = ?","count(*)","a0005"));
+//		System.out.println(getQueryDecimal("select count(*) from fit_admin where name = ?","count(*)","a0005"));
 	}
 
+	/**
+	 *
+	 * @param sql    sql语句
+	 * @param decimalKey 要查询的键
+	 * @param objs 参数
+	 * @return int count
+	 */
 	public static BigDecimal getQueryDecimal(String sql,String decimalKey,Object ...objs) {
 		BigDecimal decimal=null;
 		try {
@@ -180,6 +187,14 @@ public class SQLUtil {
 
 	}
 
+	/**
+	 *
+	 * @param cl  类
+	 * @param sql 语句
+	 * @param objs 可变参数 Select * From tableName Where id=? And Name=? pstmt.setInt(1,100)就表示此处id=100
+	 * @param <E>
+	 * @return 返回list
+	 */
 	public static <E> List<E>  find(Class cl,String sql,Object ...objs){
 		List<E> list=new ArrayList<E>();
 		try {
@@ -196,7 +211,7 @@ public class SQLUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+//			System.out.println(sql);
 		try {
 			stm=conn.prepareStatement(sql);
 			for (int i = 0; i < objs.length; i++) {
@@ -207,7 +222,7 @@ public class SQLUtil {
 		}
 		try {
 			rs = stm.executeQuery();
-			ResultSetMetaData rsmd = stm.getMetaData();
+//			ResultSetMetaData rsmd = stm.getMetaData();
 			Field[] fields = cl.getDeclaredFields();
 			while(rs.next()) {
 				try {
@@ -241,6 +256,7 @@ public class SQLUtil {
 		}
 		return list;
 	}
+
 
 	public static boolean deleteById(String tableName,Object id) {
 		String sql="delete from "+tableName+" where `id` = ?";
