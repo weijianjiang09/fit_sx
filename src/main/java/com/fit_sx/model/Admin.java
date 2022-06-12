@@ -1,40 +1,50 @@
 package com.fit_sx.model;
 
 public class Admin {
-    private Long Id;
-    private String Account;
-    private String Name;
-    private String Password;
-
-    public String getAccount() {
-        return Account;
-    }
-
-    public void setAccount(String account) {
-        Account = account;
-    }
+    private Long id;
+    private String account;
+    private String name;
+    private String password;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
