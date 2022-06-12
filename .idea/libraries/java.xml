@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="java">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://D:/java-2019-12/工具集/fastjson-1.1.42/fastjson-1.1.42/src/main/java" />
+      <root url="file://D:/java-2019-12/工具集/fastjson-1.1.42/fastjson-1.1.42/src/test/java" />
+    </SOURCES>
+  </library>
+</component>
