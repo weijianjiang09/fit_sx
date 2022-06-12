@@ -1,6 +1,7 @@
 package com.fit_sx.util;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,25 +11,243 @@ import com.fit_sx.model.User;
 
 
 public class SQLUtil {
-//	public static void main(String[] args) {
-//		Admin admin=new Admin();
-//		admin.setId(8L);
-//		admin.setName("a0002");
-//		admin.setPassword("aa123456");
-//		update("fit_admin", admin);
-//	}
-	
-	
+	public static void main(String[] args) {
+//		List<Admin> list=find(Admin.class,"select * from fit_admin");
+//		for (Admin admin : list) {
+//			System.out.println(admin);
+//		}
+//		Admin admin=findById(Admin.class, "fit_admin", "a0002","name");
+//		System.out.println(admin);
+		System.out.println(getQueryDecimal("select count(*) from fit_admin where name = ?","count(*)","a0005"));
+	}
+
+	public static BigDecimal getQueryDecimal(String sql,String decimalKey,Object ...objs) {
+		BigDecimal decimal=null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		//连接
+		Connection conn =null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			stm=conn.prepareStatement(sql);
+			for (int i = 0; i < objs.length; i++) {
+				stm.setObject(i+1, objs[i]);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			rs = stm.executeQuery();
+
+			while(rs.next()) {
+				decimal=rs.getBigDecimal(decimalKey);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return decimal;
+
+	}
+
+	public static <E> E findById(Class cl,String tableName,Object id) {
+		E obj=null;//如果findById为查询找，返回的应该是null而不是一个空对象
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		//连接
+		Connection conn =null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			stm=conn.prepareStatement("select * from "+tableName+" where id=?");
+			stm.setObject(1, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			rs = stm.executeQuery();
+			ResultSetMetaData rsmd = stm.getMetaData();
+			Field[] fields = cl.getDeclaredFields();
+			while(rs.next()) {
+				try {
+					obj=(E) cl.newInstance();
+					//反射获取属性 根据属性名去获取数据库数据
+					//数据库字段名，设置反射属性数据
+//					for(int i=1;i<rsmd.getColumnCount()+1;i++) {
+//						System.out.println(rsmd.getColumnName(i));
+//					}
+					for (Field field : fields) {
+						String key = Util.HumpToUnderline(field.getName());
+						field.setAccessible(true);
+						if(field.getType().equals(Long.class)) {
+							field.set(obj, rs.getLong(key));
+						}else if(field.getType().equals(Integer.class)) {
+							field.set(obj, rs.getInt(key));
+						}else if(field.getType().equals(BigDecimal.class)) {
+							field.set(obj, rs.getBigDecimal(key));
+						}else if(field.getType().equals(String.class)) {
+							field.set(obj, rs.getString(key));
+						}
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return obj;
+
+	}
+
+	public static <E> E findById(Class cl,String tableName,Object id,String idKey) {
+		E obj=null;//如果findById为查询找，返回的应该是null而不是一个空对象
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		//连接
+		Connection conn =null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			stm=conn.prepareStatement("select * from "+tableName+" where "+idKey+"=?");
+			stm.setObject(1, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			rs = stm.executeQuery();
+			Field[] fields = cl.getDeclaredFields();
+			while(rs.next()) {
+				try {
+					obj=(E) cl.newInstance();
+					//反射获取属性 根据属性名去获取数据库数据
+					//数据库字段名，设置反射属性数据
+//					for(int i=1;i<rsmd.getColumnCount()+1;i++) {
+//						System.out.println(rsmd.getColumnName(i));
+//					}
+					for (Field field : fields) {
+						String key = Util.HumpToUnderline(field.getName());
+						field.setAccessible(true);
+						if(field.getType().equals(Long.class)) {
+							field.set(obj, rs.getLong(key));
+						}else if(field.getType().equals(Integer.class)) {
+							field.set(obj, rs.getInt(key));
+						}else if(field.getType().equals(BigDecimal.class)) {
+							field.set(obj, rs.getBigDecimal(key));
+						}else if(field.getType().equals(String.class)) {
+							field.set(obj, rs.getString(key));
+						}
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return obj;
+
+	}
+
+	public static <E> List<E>  find(Class cl,String sql,Object ...objs){
+		List<E> list=new ArrayList<E>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		//连接
+		Connection conn =null;
+		PreparedStatement stm = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			stm=conn.prepareStatement(sql);
+			for (int i = 0; i < objs.length; i++) {
+				stm.setObject(i+1, objs[i]);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			rs = stm.executeQuery();
+			ResultSetMetaData rsmd = stm.getMetaData();
+			Field[] fields = cl.getDeclaredFields();
+			while(rs.next()) {
+				try {
+					E e=(E) cl.newInstance();
+					//反射获取属性 根据属性名去获取数据库数据
+					//数据库字段名，设置反射属性数据
+//					for(int i=1;i<rsmd.getColumnCount()+1;i++) {
+//						System.out.println(rsmd.getColumnName(i));
+//					}
+					for (Field field : fields) {
+						String key = Util.HumpToUnderline(field.getName());
+						field.setAccessible(true);
+						if(field.getType().equals(Long.class)) {
+							field.set(e, rs.getLong(key));
+						}else if(field.getType().equals(Integer.class)) {
+							field.set(e, rs.getInt(key));
+						}else if(field.getType().equals(BigDecimal.class)) {
+							field.set(e, rs.getBigDecimal(key));
+						}else if(field.getType().equals(String.class)) {
+							field.set(e, rs.getString(key));
+						}
+					}
+
+					list.add(e);
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public static boolean deleteById(String tableName,Object id) {
 		String sql="delete from "+tableName+" where `id` = ?";
 		return executeUpdate(sql, id)>0;
 	}
-	
+
 	public static boolean deleteById(String tableName,Object id,String idKey) {
 		String sql="delete from "+tableName+" where `"+idKey+"` = ?";
 		return executeUpdate(sql, id)>0;
 	}
-	
+
 	public static boolean update(String tableName,Object obj,String idKey) {
 		StringBuffer sql = new StringBuffer("update ");
 		sql.append(tableName);
@@ -60,14 +279,14 @@ public class SQLUtil {
 		try {
 			Field idField=obj.getClass().getDeclaredField(idKey);
 			idField.setAccessible(true);
- 			objs.add(idField.get(obj));
+			objs.add(idField.get(obj));
 		} catch (NoSuchFieldException | SecurityException |IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		return executeUpdate(sql.toString(), objs.toArray())>0;
 	}
-		
+
 	public static boolean update(String tableName,Object obj) {
 		StringBuffer sql = new StringBuffer("update ");
 		sql.append(tableName);
@@ -99,20 +318,16 @@ public class SQLUtil {
 		try {
 			Field idField=obj.getClass().getDeclaredField("id");
 			idField.setAccessible(true);
- 			objs.add(idField.get(obj));
+			objs.add(idField.get(obj));
 		} catch (NoSuchFieldException | SecurityException |IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+
 		return executeUpdate(sql.toString(), objs.toArray())>0;
 	}
-	
-	/**
-	 * 新增
-	 * @param tableName
-	 * @param obj
-	 * @return
-	 */
+
+
+
 	public static boolean insert(String tableName,Object obj) {
 		String sql = "insert into ";
 		sql+=tableName;
@@ -142,7 +357,7 @@ public class SQLUtil {
 		}
 		return executeUpdate(sql,objs.toArray())>0;
 	}
-	
+
 	public static boolean insert(String tableName,Object obj,String idKey) {
 		String sql = "insert into ";
 		sql+=tableName;
@@ -170,20 +385,20 @@ public class SQLUtil {
 				}
 			}
 		}
-		
+
 		return executeUpdate(sql, objs)>0;
 	}
 
 	public static int executeUpdate(String sql,Object ...obj) {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		//连接
 		Connection conn =null;
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai", "root", "jk123");
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/fit_game?useUnicode=true&characterEncoding=utf-8", "root", "aa123456");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -196,7 +411,7 @@ public class SQLUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 
 		int count=0;
 		try {
@@ -204,7 +419,7 @@ public class SQLUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			stm.close();
 			conn.close();
