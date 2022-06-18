@@ -2,6 +2,11 @@
   <library name="fastjson-1.2.2">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/src/main/resources/lib/fastjson-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/commons-configuration-1.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/commons-fileupload-1.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/commons-io-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/commons-lang-2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/commons-logging-1.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,17 +1,22 @@
 package com.fit_sx.model;
 
+import java.util.Date;
+
 public class User {
     private Long id;
     private String password;
     private String account;
     private String name;
+    private String headImg;
+    private String status;
+    private String createdAt;
 
-    public Long getId() {
-        return id;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
@@ -21,7 +26,26 @@ public class User {
                 ", password='" + password + '\'' +
                 ", account='" + account + '\'' +
                 ", name='" + name + '\'' +
+                ", headImg='" + headImg + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
+    }
+
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPassword() {
